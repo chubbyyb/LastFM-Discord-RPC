@@ -1,5 +1,11 @@
 # LastFM-Discord-RPC
-This adds RPC to Discord from LastFM.
+![logo](assets/logo.png)<br />
+This adds RPC to Discord from LastFM.<br />
+It will show:
+<ul>
+<li>Current song information</li>
+<li>Scrobble amount of the song</li>
+</ul>
 
 ## Requirements 🛠️
 1. Python Installed

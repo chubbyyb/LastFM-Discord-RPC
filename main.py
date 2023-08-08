@@ -27,7 +27,7 @@ while True:
                 large_image=f"{albumCoverURL}",
                 large_text=f"{artistName}",
                 small_image="lastfm",
-                small_text="Last.fm",
+                small_text=f"{getInfo.getScrobbles()} scrobbles",
                 details=f"{songName}",
                 state=f"by {artistName}",
                 start=time.time(),
