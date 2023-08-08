@@ -1,7 +1,13 @@
-# YoutubeRPC
+# LastFM-Discord-RPC
 This adds RPC to Discord from LastFM.
 
-
+## Requirements 🛠️
+1. Python Installed
+2. Open getInfo.py, change the URL variable to your lastFM profile
+3. Open CMD, type ``CD C:\Wherever\you\downloaded\the\project\path``, and type ``pip install requirements.txt``
+4. type ``Python main.py`` OR ``Python3 main.py``
+ 
+## App 🎵
 ![eg1](assets/eg1.png)<br />
 ![eg2](assets/eg2.png)<br />
 ![eg3](assets/eg3.png)<br />
