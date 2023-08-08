@@ -6,6 +6,7 @@ import getInfo
 client_id = "1138271149839634532"
 RPC = Presence(client_id)
 RPC.connect()
+prevSong = '-'
 
 
 while True:
@@ -13,11 +14,23 @@ while True:
     artistName = getInfo.getArtistName()
     albumCoverURL = getInfo.getAlbumCoverURL()
     print(artistName.replace(' ', '_').lower())
-    RPC.update(
-        large_image=f"{artistName.replace(' ', '_').lower()}",
-        large_text=f"{artistName}",
-        details=f"{songName} - {artistName}",
-        state="Playing"
-        #buttons= [{"label": "YTM","url":"https://music.youtube.com/"}, {"label": "YTM","url":"https://music.youtube.com/"}]
-    )
+    if(songName == "NSP"):
+        print("Nothing playing")
+        RPC.clear()
+    else:
+        if(songName == prevSong): 
+            print("Same song playing")
+        else:
+            print("New song playing")
+            prevSong = songName
+            RPC.update(
+                large_image=f"{artistName.replace(' ', '_').lower()}",
+                large_text=f"{artistName}",
+                small_image="lastfm",
+                small_text="Last.fm",
+                details=f"{songName}",
+                state=f"by {artistName}",
+                start=time.time(),
+                #buttons= [{"label": "YTM","url":"https://music.youtube.com/"}, {"label": "YTM","url":"https://music.youtube.com/"}]
+            )
     time.sleep(10)

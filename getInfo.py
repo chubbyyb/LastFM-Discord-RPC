@@ -1,10 +1,12 @@
 import requests
 from bs4 import BeautifulSoup
-import pypresence
 
 
 BaseURL = "https://www.last.fm"
 URL = "https://www.last.fm/user/Chubbyyb"
+headers={'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:109.0) Gecko/20100101 Firefox/116.0', "Accept":"text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8"}
+
+
 
 def getPage():
     # Get the HTML of the page
@@ -16,19 +18,28 @@ def getPage():
 
 def getSongName():
     # Get the song name and artist name
-    songName = getPage()[0].find(class_="chartlist-name").get_text()
-    return songName.strip()
+    try:
+        songName = getPage()[0].find(class_="chartlist-name").get_text()
+        return songName.strip()
+    except:
+        return "NSP"
 
 def getArtistName():
-    artistName = getPage()[0].find(class_="chartlist-artist").get_text()
-    return artistName.strip()
+    try:
+        artistName = getPage()[0].find(class_="chartlist-artist").get_text()
+        return artistName.strip()
+    except:
+        return "NSP"
 
 def getAlbumCoverURL():
     # Get the album cover
-    albumCover = BaseURL + getPage()[0].find(class_="chartlist-image").find("a").get("href")
-    albumCoverPage = requests.get(albumCover)
-    albumCoverSoup = BeautifulSoup(albumCoverPage.content, 'html.parser')
-    albumCoverURL = albumCoverSoup.find(class_="album-overview-cover-art js-focus-controls-container").find("img").get("src")
-    return albumCoverURL.strip()
+    try:
+        albumCover = BaseURL + getPage()[0].find(class_="chartlist-image").find("a").get("href")
+        albumCoverPage = requests.get(albumCover)
+        albumCoverSoup = BeautifulSoup(albumCoverPage.content, 'html.parser')
+        albumCoverURL = albumCoverSoup.find(class_="album-overview-cover-art js-focus-controls-container").find("img").get("src")
+        return albumCoverURL.strip()
+    except:
+        return "NSP"
 
 print(f"Song Name: {getSongName()}\nArtist Name: {getArtistName()}\nAlbum Cover: {getAlbumCoverURL()}")
