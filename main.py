@@ -24,7 +24,7 @@ while True:
             print("New song playing")
             prevSong = songName
             RPC.update(
-                large_image=f"{artistName.replace(' ', '_').lower()}",
+                large_image=f"{albumCoverURL}",
                 large_text=f"{artistName}",
                 small_image="lastfm",
                 small_text="Last.fm",
