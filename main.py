@@ -31,6 +31,6 @@ while True:
                 details=f"{songName}",
                 state=f"by {artistName}",
                 start=time.time(),
-                #buttons= [{"label": "YTM","url":"https://music.youtube.com/"}, {"label": "YTM","url":"https://music.youtube.com/"}]
+                buttons= [{"label": "Github","url":"https://github.com/chubbyyb/LastFM-Discord-RPC"}]
             )
     time.sleep(10)
