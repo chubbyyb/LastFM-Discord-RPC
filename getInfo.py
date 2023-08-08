@@ -41,5 +41,15 @@ def getAlbumCoverURL():
         return albumCoverURL.strip()
     except:
         return "NSP"
+    
+def getScrobbles():
+    try:
+        scrobblesURL = requests.get(URL + "/library/music/" + getArtistName().replace(' ', '+') + "/_/" + getSongName().replace(' ', '+')).text
+        #print(URL + "/library/music/" + getArtistName().replace(' ', '+') + "/_/" + getSongName().replace(' ', '+'))
+        scrobbles = BeautifulSoup(scrobblesURL, 'html.parser').find(class_="metadata-display").get_text()
+        print(scrobbles)
+        return scrobbles.strip()
+    except:
+        return "NSP"
 
-print(f"Song Name: {getSongName()}\nArtist Name: {getArtistName()}\nAlbum Cover: {getAlbumCoverURL()}")
+print(f"Song Name: {getSongName()}\nArtist Name: {getArtistName()}\nAlbum Cover: {getAlbumCoverURL()}\nScrobbles: {getScrobbles()}")
