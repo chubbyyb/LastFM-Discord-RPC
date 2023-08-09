@@ -6,6 +6,9 @@ It will show:
 <li>Current song information</li>
 <li>Scrobble amount of the song</li>
 </ul>
+<br />
+This application works by web scraping last.fm. I'm currently working on a better version that uses the API instead.
+<br /><br />
 
 ## Requirements 🛠️
 1. Python Installed
