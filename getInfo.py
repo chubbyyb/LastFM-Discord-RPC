@@ -1,55 +1,40 @@
 import requests
+import json
 from bs4 import BeautifulSoup
 
+api_key = "API_KEY"
+username = "chubbyyb"
+BaseURL = f"https://www.last.fm/user/{username}"
+URL = f"http://ws.audioscrobbler.com/2.0/?method=user.getrecenttracks&user={username}&api_key={api_key}&format=json"
+profileInfo = f"http://ws.audioscrobbler.com/2.0/?method=user.getinfo&user={username}&api_key={api_key}&format=json"
 
-BaseURL = "https://www.last.fm"
-URL = "https://www.last.fm/user/Chubbyyb"
-headers={'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:109.0) Gecko/20100101 Firefox/116.0', "Accept":"text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8"}
+
+def getProfilePic():
+    profileInfoJson = requests.get(profileInfo)
+    profilePic = json.loads(profileInfoJson.text)['user']['image'][2]['#text']
+    return profilePic
 
 
-
-def getPage():
-    # Get the HTML of the page
+def getMusic():
+    scrobbles = 0
     page = requests.get(URL)
-    soup = BeautifulSoup(page.content, 'html.parser')
-    class_name = "chartlist-row chartlist-row--now-scrobbling chartlist-row--with-artist chartlist-row--with-buylinks js-focus-controls-container"
-    elements = soup.find_all(class_=class_name)
-    return elements
+    artist = json.loads(page.text)['recenttracks']['track'][0]['artist']['#text']
+    songName = json.loads(page.text)['recenttracks']['track'][0]['name']
+    album = json.loads(page.text)['recenttracks']['track'][0]['album']['#text']
+    image = json.loads(page.text)['recenttracks']['track'][0]['image'][3]['#text']
 
-def getSongName():
-    # Get the song name and artist name
-    try:
-        songName = getPage()[0].find(class_="chartlist-name").get_text()
-        return songName.strip()
-    except:
-        return "NSP"
-
-def getArtistName():
-    try:
-        artistName = getPage()[0].find(class_="chartlist-artist").get_text()
-        return artistName.strip()
-    except:
-        return "NSP"
-
-def getAlbumCoverURL():
-    # Get the album cover
-    try:
-        albumCover = BaseURL + getPage()[0].find(class_="chartlist-image").find("a").get("href")
-        albumCoverPage = requests.get(albumCover)
-        albumCoverSoup = BeautifulSoup(albumCoverPage.content, 'html.parser')
-        albumCoverURL = albumCoverSoup.find(class_="album-overview-cover-art js-focus-controls-container").find("img").get("src")
-        return albumCoverURL.strip()
-    except:
-        return "NSP"
+    # Check if now playing
+    try: nowplaying = json.loads(page.text)['recenttracks']['track'][0]['@attr']['nowplaying']
+    except: return ["NSP", "NSP", "NSP", "NSP", "NSP"]
     
-def getScrobbles():
     try:
-        scrobblesURL = requests.get(URL + "/library/music/" + getArtistName().replace(' ', '+') + "/_/" + getSongName().replace(' ', '+')).text
+        scrobblesURL = requests.get(BaseURL + "/library/music/" + artist.replace(' ', '+') + "/_/" + songName.replace(' ', '+')).text
         #print(URL + "/library/music/" + getArtistName().replace(' ', '+') + "/_/" + getSongName().replace(' ', '+'))
         scrobbles = BeautifulSoup(scrobblesURL, 'html.parser').find(class_="metadata-display").get_text()
-        print(scrobbles)
-        return scrobbles.strip()
     except:
-        return "NSP"
+        print("Scrobbles not found")
+    
+    return [artist.strip(), songName.strip(), album.strip(), image.strip(), scrobbles]
 
-print(f"Song Name: {getSongName()}\nArtist Name: {getArtistName()}\nAlbum Cover: {getAlbumCoverURL()}\nScrobbles: {getScrobbles()}")
+
+

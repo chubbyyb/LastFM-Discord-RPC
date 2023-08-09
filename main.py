@@ -7,13 +7,16 @@ client_id = "1138271149839634532"
 RPC = Presence(client_id)
 RPC.connect()
 prevSong = '-'
+profilePic = getInfo.getProfilePic()
 
 
 while True:
-    songName = getInfo.getSongName()
-    artistName = getInfo.getArtistName()
-    albumCoverURL = getInfo.getAlbumCoverURL()
-    print(artistName.replace(' ', '_').lower())
+    musicInfo = getInfo.getMusic()
+    songName = musicInfo[1]
+    artistName = musicInfo[0]
+    albumName = musicInfo[2]
+    albumCoverURL = musicInfo[3]
+    scrobbles = musicInfo[4]
     if(songName == "NSP"):
         print("Nothing playing")
         RPC.clear()
@@ -25,9 +28,9 @@ while True:
             prevSong = songName
             RPC.update(
                 large_image=f"{albumCoverURL}",
-                large_text=f"{artistName}",
-                small_image="lastfm",
-                small_text=f"{getInfo.getScrobbles()} scrobbles",
+                large_text=f"{albumName}",
+                small_image=f"{profilePic}",
+                small_text=f"{scrobbles} scrobbles",
                 details=f"{songName}",
                 state=f"by {artistName}",
                 start=time.time(),
