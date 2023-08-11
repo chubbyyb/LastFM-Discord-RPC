@@ -1,9 +1,19 @@
 import requests
 import json
 from bs4 import BeautifulSoup
+import os
 
-api_key = "API_KEY"
-username = "chubbyyb"
+
+if os.path.exists("config.json") == False:
+    print("Config file not found, please run setup.py")
+    input("Press enter to quit")
+    quit()
+
+with open("config.json", "r") as f:
+    config = json.load(f)
+
+api_key = config["API_KEY"]
+username = config["username"]
 BaseURL = f"https://www.last.fm/user/{username}"
 URL = f"http://ws.audioscrobbler.com/2.0/?method=user.getrecenttracks&user={username}&api_key={api_key}&format=json"
 profileInfo = f"http://ws.audioscrobbler.com/2.0/?method=user.getinfo&user={username}&api_key={api_key}&format=json"
@@ -22,6 +32,12 @@ def getMusic():
     songName = json.loads(page.text)['recenttracks']['track'][0]['name']
     album = json.loads(page.text)['recenttracks']['track'][0]['album']['#text']
     image = json.loads(page.text)['recenttracks']['track'][0]['image'][3]['#text']
+
+    #try:
+    #    trackInfo = f"http://ws.audioscrobbler.com/2.0/?method=track.getInfo&api_key={api_key}&artist={artist.replace(' ', '+')}&track={songName.replace(' ', '+')}&format=json"
+    #    duration = json.loads(requests.get(trackInfo).text)['track']['duration']
+    #except:
+    #   print("duration not found")
 
     # Check if now playing
     try: nowplaying = json.loads(page.text)['recenttracks']['track'][0]['@attr']['nowplaying']

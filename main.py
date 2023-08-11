@@ -22,9 +22,9 @@ while True:
         RPC.clear()
     else:
         if(songName == prevSong): 
-            print("Same song playing")
+            print(f"Same song playing - {songName}")
         else:
-            print("New song playing")
+            print(f"New song playing - {songName}")
             prevSong = songName
             RPC.update(
                 large_image=f"{albumCoverURL}",
