@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>LastFM-RPC</title>
+        <link rel="stylesheet" href="style/style.css">
+        <script>
+        function fetchData()
+        {
+            let fetchedData;
+            // Fetch the data from the API
+            fetch('http://localhost:5000/songInfo')
+            .then(response => response.json())
+            .then(data => {
+                fetchedData = data;
+                console.log(fetchedData); // Now you can access the data
+                let songName = fetchedData["SongName"];
+                let artist = fetchedData["Artist"];
+                let album = fetchedData["Album"];
+                let albumPic = fetchedData["AlbumCover"];
+                let scrobbles = fetchedData["Scrobbles"];
+                //console.log(songName, artist, album, albumPic, scrobbles);
+
+                // Update the HTML elements with the fetched data
+                document.getElementById("songName").textContent = songName;
+                document.getElementById("songArtist").textContent = artist;
+                document.getElementById("songAlbum").textContent = album;
+                document.getElementById("albumPic").src = albumPic;
+                document.getElementById("songScrobbles").textContent = scrobbles;
+                console.log(albumPic);
+
+                if(songName == "NSP")
+                {
+                    document.getElementById("status").textContent = "Status - Paused or Unrecognized Song";
+                }
+                else
+                {
+                    document.getElementById("status").textContent = "Status - Playing";
+                }
+            }).catch(err => {
+                document.getElementById("status").textContent = "Status - Server Offline";
+                console.log(err);
+            });
+
+        }
+
+            setInterval(fetchData, 5000);
+        </script>
+        <script>
+            var path = require('path');
+            var json = require(path.join(__dirname, '..', 'pyApp', 'config.json'))
+            var fs = require('fs');
+
+            function play() {
+                //var audio = document.getElementById("audio");
+                //audio.play();
+            }
+
+            function getConfig(){
+                fetch(path.join(__dirname, '..', 'pyApp', 'config.json'))
+                .then((response) => response.json())
+                .then((json) => console.log(json));
+                console.log(path.join(__dirname, '..', 'pyApp', 'config.json'));
+                console.log(json["username"]);
+                console.log(json["API_KEY"]);
+                document.getElementById("usernameINPT").value = json["username"];
+                document.getElementById("apiINPT").value = json["API_KEY"];
+            }
+
+            function ammendConfig()
+            {
+                var username = document.getElementById("usernameINPT").value;
+                var API_KEY = document.getElementById("apiINPT").value;
+                var config = {
+                    "username": username,
+                    "API_KEY": API_KEY
+                }
+                fs.writeFile(path.join(__dirname, '..', 'pyApp', 'config.json'), JSON.stringify(config), function(err) {
+                    if (err) throw err;
+                    console.log('complete');
+                });
+            }
+        </script>
+        <script>
+            const {PythonShell} = require('python-shell');
+            
+            function shutdownServer()
+            {
+                fetch('http://localhost:5000/shutdown')
+                .then(response => response.json())
+                .then(data => {
+                    console.log(data);
+                });
+            }
+
+            function startServer()
+            {
+                serverPyshell = new PythonShell('pyApp\\server.py');
+            }
+        </script>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
+    </head>
+
+
+
+
+
+
+
+
+
+
+
+
+    <body style="background-color: #060714; user-select: none;">
+        <h1 class="lexend" style="text-align: center;">LastFM RPC</h1>
+        <div class="vDIV"></div>
+        <div class="container">
+            <div class="row">
+                <div id="behindPic" class="col" style="background-color: gray; margin-top: 15px; border-radius: 7px;">
+                    <img id='albumPic' class="img-fluid" src="" alt="" style="margin-top: 10px; margin-bottom: 10px; border-radius: 7px; pointer-events: none;">
+                </div>
+
+                <div id="boxNextPic" class="col-md-7" style="background-color: black; margin-top: 15px; margin-left: 15px; border-radius: 0px;">
+                    <div class="row align-items-center" style="border-style: solid; padding: 1px; background-color: #0200a6;">
+                        <div class="col-auto pr-0">
+                            <img class="img-fluid" src="images/W3T1.png" alt="win98" style="height: 28px; width: 28px;">
+                        </div>
+                        <div class="col" style="margin-left: -12px;">
+                            <h1 class="m-0" style="font-size: 15px; color: white; font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;">
+                                Track Information
+                            </h1>
+                        </div>
+                        <div class="col-auto pr-0">
+                            <img class="img-fluid" src="images/min.png" alt="win98" style="height: 23px; width: 23px; cursor: pointer;" onclick="play();">
+                            <img class="img-fluid" src="images/x.png" alt="win98" style="height: 32px; width: 32px; cursor: pointer;" onclick="play();">
+                        </div>
+                    </div>
+                    <div><p style="color: white; font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;">Microsoft(R) Windows 98<br>(C) Copyright Microsoft Corp 1981-1996<br></p></div>
+                    <p id="elementEl" style="color: white; font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;">C:\Track--> <span style="color: #3c3ac7;" id="songName"></span></p>
+                    <p id="elementEl1" style="color: white; font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;">C:\Artist--> <span id="songArtist"></span></p>
+                    <p id="elementEl" style="color: white; font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;">C:\Album--> <span id="songAlbum"></span></p>
+                    <p id="elementEl" style="color: white; font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;">C:\Scrobbles--> <span id="songScrobbles"></span></p>
+
+                </div>
+            </div>
+        <br>
+        <p id="status" style="color: white; font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;">Status - </p>
+        <button class="btn btn-success" onclick="play(); startServer(); fetchData();">Start Server</button>
+        <button class="btn btn-danger" onclick="play(); shutdownServer(); fetchData();">Shutdown Server</button>
+        <button class="btn btn-primary" onclick="play(); settings.showModal(); getConfig();">Settings</button>
+
+    </body>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <audio id="audio" src="click.mp3"></audio>
+    <dialog id="settings" style="height: 500; width: 500px; background-color: #bec8c5;">
+        <div></div>
+        <h2>Settings</h2>
+        <br>
+        <!-- dialog contents -->
+        
+        <p style="font-size: medium;">Username: <span><input spellcheck="false" id="usernameINPT"></input></span></p>
+        <p>API_KEY: <span><input spellcheck="false" id="apiINPT"></input></span></p>
+
+        <button class="btn btn-danger" onclick="play(); settings.close()">Close</button>
+        <button class="btn btn-warning" onclick="ammendConfig();">Apply</button>
+    </dialog>
+    
+</html>
