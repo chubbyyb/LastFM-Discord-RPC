@@ -11,9 +11,9 @@ It will show:
 ## Requirements 🛠️
 1. Python Installed
 2. Create a [LastFM API Key](https://www.last.fm/api/account/create)
-3. Open getInfo.py, change username variable to your username. Enter the API key you just created into the api_key variable
-4. Open CMD, type ``CD C:\Wherever\you\downloaded\the\project\path``, and type ``pip install requirements.txt``
-5. type ``Python main.py`` OR ``Python3 main.py``
+3. Open CMD, type ``CD C:\Wherever\you\downloaded\the\project\path``, and type ``pip install requirements.txt``
+4. type ``python config.py`` or ``python3 config.py`` and enter your username and API_KEY
+5. type ``python main.py`` OR ``python3 main.py``
  
 ## App 🎵
 ![eg1](assets/eg1.png)<br />
