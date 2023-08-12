@@ -4,51 +4,10 @@
         <meta charset="UTF-8">
         <title>LastFM-RPC</title>
         <link rel="stylesheet" href="style/style.css">
-        <script>
-        function fetchData()
-        {
-            let fetchedData;
-            // Fetch the data from the API
-            fetch('http://localhost:5000/songInfo')
-            .then(response => response.json())
-            .then(data => {
-                fetchedData = data;
-                console.log(fetchedData); // Now you can access the data
-                let songName = fetchedData["SongName"];
-                let artist = fetchedData["Artist"];
-                let album = fetchedData["Album"];
-                let albumPic = fetchedData["AlbumCover"];
-                let scrobbles = fetchedData["Scrobbles"];
-                //console.log(songName, artist, album, albumPic, scrobbles);
-
-                // Update the HTML elements with the fetched data
-                document.getElementById("songName").textContent = songName;
-                document.getElementById("songArtist").textContent = artist;
-                document.getElementById("songAlbum").textContent = album;
-                document.getElementById("albumPic").src = albumPic;
-                document.getElementById("songScrobbles").textContent = scrobbles;
-                console.log(albumPic);
-
-                if(songName == "NSP")
-                {
-                    document.getElementById("status").textContent = "Status - Paused or Unrecognized Song";
-                }
-                else
-                {
-                    document.getElementById("status").textContent = "Status - Playing";
-                }
-            }).catch(err => {
-                document.getElementById("status").textContent = "Status - Server Offline";
-                console.log(err);
-            });
-
-        }
-
-            setInterval(fetchData, 5000);
-        </script>
+        <script src="scripts/test.js"></script>
         <script>
             var path = require('path');
-            var json = require(path.join(__dirname, '..', 'pyApp', 'config.json'))
+            var json = require(path.join(__dirname, 'config.json'));
             var fs = require('fs');
 
             function play() {
@@ -57,25 +16,31 @@
             }
 
             function getConfig(){
-                fetch(path.join(__dirname, '..', 'pyApp', 'config.json'))
+                fetch(path.join(__dirname, 'config.json'))
                 .then((response) => response.json())
                 .then((json) => console.log(json));
-                console.log(path.join(__dirname, '..', 'pyApp', 'config.json'));
                 console.log(json["username"]);
                 console.log(json["API_KEY"]);
+                console.log(json["smallImagePP"]);
                 document.getElementById("usernameINPT").value = json["username"];
                 document.getElementById("apiINPT").value = json["API_KEY"];
+                document.getElementById("useSmallImageSlide").checked = json["smallImagePP"];
+                document.getElementById("displayScrobbles").checked = json["displayScrobbles"];
             }
 
             function ammendConfig()
             {
                 var username = document.getElementById("usernameINPT").value;
                 var API_KEY = document.getElementById("apiINPT").value;
+                var smallImagePP = document.getElementById("useSmallImageSlide").checked;
+                var displayScrobbles = document.getElementById("displayScrobbles").checked;
                 var config = {
                     "username": username,
-                    "API_KEY": API_KEY
+                    "API_KEY": API_KEY,
+                    "smallImagePP": smallImagePP,
+                    "displayScrobbles": displayScrobbles
                 }
-                fs.writeFile(path.join(__dirname, '..', 'pyApp', 'config.json'), JSON.stringify(config), function(err) {
+                fs.writeFile(path.join(__dirname, 'config.json'), JSON.stringify(config), function(err) {
                     if (err) throw err;
                     console.log('complete');
                 });
@@ -146,7 +111,7 @@
                 </div>
             </div>
         <br>
-        <p id="status" style="color: white; font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;">Status - </p>
+        <p id="status" style="color: white; font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;">Status - Loading</p>
         <button class="btn btn-success" onclick="play(); startServer(); fetchData();">Start Server</button>
         <button class="btn btn-danger" onclick="play(); shutdownServer(); fetchData();">Shutdown Server</button>
         <button class="btn btn-primary" onclick="play(); settings.showModal(); getConfig();">Settings</button>
@@ -170,14 +135,22 @@
 
 
     <audio id="audio" src="click.mp3"></audio>
-    <dialog id="settings" style="height: 500; width: 500px; background-color: #bec8c5;">
+    <dialog id="settings" style="height: 500; width: 500px; background-color: #bec8c5;" tabindex="-1">
         <div></div>
         <h2>Settings</h2>
         <br>
         <!-- dialog contents -->
         
-        <p style="font-size: medium;">Username: <span><input spellcheck="false" id="usernameINPT"></input></span></p>
+        <p tabindex="-1" style="font-size: medium;">Username: <span><input spellcheck="false" id="usernameINPT"></input></span></p>
         <p>API_KEY: <span><input spellcheck="false" id="apiINPT"></input></span></p>
+        <div class="form-check form-switch">
+            <input class="form-check-input" type="checkbox" role="switch" id="useSmallImageSlide">
+            <label class="form-check-label" for="useSmallImageSlide">Use LastFM profile picture as small image</label>
+        </div>
+        <div class="form-check form-switch">
+            <input class="form-check-input" type="checkbox" role="switch" id="displayScrobbles">
+            <label class="form-check-label" for="displayScrobbles">Display Scrobbles</label>
+        </div>
 
         <button class="btn btn-danger" onclick="play(); settings.close()">Close</button>
         <button class="btn btn-warning" onclick="ammendConfig();">Apply</button>

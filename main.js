@@ -1,6 +1,7 @@
 const path = require('path');
 const { app, BrowserWindow } = require('electron');
 const {PythonShell} = require('python-shell');
+//const test = require('./app/scripts/test.js');
 
 function createMainWindow()
 {
