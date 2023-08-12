@@ -9,7 +9,11 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "discord-rich-presence": "^0.0.8",
+    "dom-parser": "^0.1.6",
     "electron": "^25.4.0",
+    "jsdom": "^22.1.0",
+    "nodemon": "^3.0.1",
     "python-shell": "^5.0.0"
   },
   "devDependencies": {
