@@ -112,8 +112,6 @@
             </div>
         <br>
         <p id="status" style="color: white; font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;">Status - Loading</p>
-        <button class="btn btn-success" onclick="play(); startServer(); fetchData();">Start Server</button>
-        <button class="btn btn-danger" onclick="play(); shutdownServer(); fetchData();">Shutdown Server</button>
         <button class="btn btn-primary" onclick="play(); settings.showModal(); getConfig();">Settings</button>
 
     </body>
@@ -135,21 +133,21 @@
 
 
     <audio id="audio" src="click.mp3"></audio>
-    <dialog id="settings" style="height: 500; width: 500px; background-color: #bec8c5;" tabindex="-1">
+    <dialog id="settings" style="height: 500; width: 500px; background-color: #bec8c5; user-select: none;" tabindex="-1" >
         <div></div>
-        <h2>Settings</h2>
+        <h2 style="color: black;">Settings</h2>
         <br>
         <!-- dialog contents -->
         
-        <p tabindex="-1" style="font-size: medium;">Username: <span><input spellcheck="false" id="usernameINPT"></input></span></p>
-        <p>API_KEY: <span><input spellcheck="false" id="apiINPT"></input></span></p>
+        <p tabindex="-1" style="font-size: medium; color: black;">Username: <span><input spellcheck="false" id="usernameINPT"></input></span></p>
+        <p style="color: black;">API_KEY: <span><input spellcheck="false" id="apiINPT"></input></span></p>
         <div class="form-check form-switch">
             <input class="form-check-input" type="checkbox" role="switch" id="useSmallImageSlide">
-            <label class="form-check-label" for="useSmallImageSlide">Use LastFM profile picture as small image</label>
+            <label class="form-check-label" for="useSmallImageSlide" style="color: black;">Use LastFM profile picture as small image</label>
         </div>
         <div class="form-check form-switch">
             <input class="form-check-input" type="checkbox" role="switch" id="displayScrobbles">
-            <label class="form-check-label" for="displayScrobbles">Display Scrobbles</label>
+            <label class="form-check-label" for="displayScrobbles" style="color: black;">Display Scrobbles</label>
         </div>
 
         <button class="btn btn-danger" onclick="play(); settings.close()">Close</button>

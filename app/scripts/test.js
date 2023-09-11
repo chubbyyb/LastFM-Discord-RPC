@@ -130,7 +130,7 @@ function updatePresence() {
       document.getElementById("songName").textContent = 'Paused';
       document.getElementById("songArtist").textContent = '';
       document.getElementById("songAlbum").textContent = '';
-      document.getElementById("albumPic").src = profilePicUrl;
+      document.getElementById("albumPic").src = '';
       document.getElementById("songScrobbles").textContent = '';
       document.getElementById("status").textContent = "Status - Paused";
       rpc.clearActivity();
