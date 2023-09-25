@@ -12,6 +12,19 @@ It will show:
 3. Run ``lfmRPC.exe``
 4. Press settings, input your username and API key
 5. Restart the program
+
+# Build 🛠️
+I like using electronmon because it hot reloads, feel free to edit manually
+1. ```bash
+   npm install
+   ```
+2. ```bash
+   npm install electronmon
+   ```
+3. ```
+   npx electronmon .
+   ```
+   
  
 ## Images 🎵
 ![eg1](assets/eg1.png)<br />
