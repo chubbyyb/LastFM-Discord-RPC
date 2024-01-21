@@ -24,7 +24,7 @@ function createMainWindow()
 
 app.whenReady().then(() =>{ 
     // Start the main Python script
-     mainPyshell = new PythonShell('pyApp\\main.py');
+     mainPyshell = new PythonShell('app\\scripts\\lyricsBoi.py');
 
     // Start the server Python script
     createMainWindow()
