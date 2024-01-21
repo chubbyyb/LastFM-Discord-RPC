@@ -4,7 +4,7 @@
         <meta charset="UTF-8">
         <title>LastFM-RPC</title>
         <link rel="stylesheet" href="style/style.css">
-        <script src="scripts/test.js"></script>
+        <script src="scripts/RPC.js"></script>
         <script>
             var path = require('path');
             var json = require(path.join(__dirname, 'config.json'));
@@ -22,10 +22,12 @@
                 console.log(json["username"]);
                 console.log(json["API_KEY"]);
                 console.log(json["smallImagePP"]);
+                console.log(json["displayLyrics"]);
                 document.getElementById("usernameINPT").value = json["username"];
                 document.getElementById("apiINPT").value = json["API_KEY"];
                 document.getElementById("useSmallImageSlide").checked = json["smallImagePP"];
                 document.getElementById("displayScrobbles").checked = json["displayScrobbles"];
+                document.getElementById("displayLyrics").checked = json["displayLyrics"];
             }
 
             function ammendConfig()
@@ -34,11 +36,14 @@
                 var API_KEY = document.getElementById("apiINPT").value;
                 var smallImagePP = document.getElementById("useSmallImageSlide").checked;
                 var displayScrobbles = document.getElementById("displayScrobbles").checked;
+                var displayLyrics = document.getElementById("displayLyrics").checked;
+                
                 var config = {
                     "username": username,
                     "API_KEY": API_KEY,
                     "smallImagePP": smallImagePP,
-                    "displayScrobbles": displayScrobbles
+                    "displayScrobbles": displayScrobbles,
+                    "displayLyrics": displayLyrics
                 }
                 fs.writeFile(path.join(__dirname, 'config.json'), JSON.stringify(config), function(err) {
                     if (err) throw err;
@@ -148,6 +153,10 @@
         <div class="form-check form-switch">
             <input class="form-check-input" type="checkbox" role="switch" id="displayScrobbles">
             <label class="form-check-label" for="displayScrobbles" style="color: black;">Display Scrobbles</label>
+        </div>
+        <div class="form-check form-switch">
+            <input class="form-check-input" type="checkbox" role="switch" id="displayLyrics">
+            <label class="form-check-label" for="displayLyrics" style="color: black;">Display Lyrics in your bio [BETA] </label>
         </div>
 
         <button class="btn btn-danger" onclick="play(); settings.close()">Close</button>
