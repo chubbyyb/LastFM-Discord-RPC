@@ -15,7 +15,7 @@
                 //audio.play();
             }
 
-            function getConfig(){
+            function getConfigA(){
                 fetch(path.join(__dirname, 'config.json'))
                 .then((response) => response.json())
                 .then((json) => console.log(json));
@@ -27,6 +27,8 @@
                 document.getElementById("apiINPT").value = json["API_KEY"];
                 document.getElementById("useSmallImageSlide").checked = json["smallImagePP"];
                 document.getElementById("displayScrobbles").checked = json["displayScrobbles"];
+                document.getElementById("githubButton").checked = json["gitButton"];
+                document.getElementById("LFM Button").checked = json["FMbutton"];
                 //document.getElementById("displayLyrics").checked = json["displayLyrics"];
             }
 
@@ -36,6 +38,8 @@
                 var API_KEY = document.getElementById("apiINPT").value;
                 var smallImagePP = document.getElementById("useSmallImageSlide").checked;
                 var displayScrobbles = document.getElementById("displayScrobbles").checked;
+                var gitButton = document.getElementById("githubButton").checked;
+                var FMbutton = document.getElementById("LFM Button").checked;
                 //var displayLyrics = document.getElementById("displayLyrics").checked;
                 
                 var config = {
@@ -43,11 +47,14 @@
                     "API_KEY": API_KEY,
                     "smallImagePP": smallImagePP,
                     "displayScrobbles": displayScrobbles,
-                    "displayLyrics": false
+                    "displayLyrics": false,
+                    "gitButton": gitButton,
+                    "FMbutton": FMbutton
                 }
                 fs.writeFile(path.join(__dirname, 'config.json'), JSON.stringify(config), function(err) {
                     if (err) throw err;
                     console.log('complete');
+                    initialize();
                 });
             }
         </script>
@@ -117,7 +124,7 @@
             </div>
         <br>
         <p id="status" style="color: white; font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;">Status - Loading</p>
-        <button class="btn btn-primary" onclick="play(); settings.showModal(); getConfig();">Settings</button>
+        <button class="btn btn-primary" onclick="play(); settings.showModal(); getConfigA();">Settings</button>
 
     </body>
 
@@ -153,6 +160,15 @@
         <div class="form-check form-switch">
             <input class="form-check-input" type="checkbox" role="switch" id="displayScrobbles">
             <label class="form-check-label" for="displayScrobbles" style="color: black;">Display Scrobbles</label>
+        </div>
+
+        <div class="form-check form-switch">
+            <input class="form-check-input" type="checkbox" role="switch" id="githubButton">
+            <label class="form-check-label" for="githubButton" style="color: black;">Display GH Button</label>
+        </div>
+        <div class="form-check form-switch">
+            <input class="form-check-input" type="checkbox" role="switch" id="LFM Button">
+            <label class="form-check-label" for="LFM Button" style="color: black;">Display LFM Button</label>
         </div>
         <!--
         <div class="form-check form-switch">
