@@ -37,6 +37,8 @@ app.whenReady().then(() =>{
 
 app.on('window-all-closed', () => {
     if (process.platform !== 'darwin') {
+        mainPyshell.end()
+        fetch('http://127.0.0.1:5000/shutdown') // PLEASE DIE
         app.quit()
     }
 })
