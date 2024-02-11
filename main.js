@@ -24,7 +24,7 @@ function createMainWindow()
 
 app.whenReady().then(() =>{ 
     // Start the main Python script
-     mainPyshell = new PythonShell('app\\scripts\\lyricsBoi.py');
+     //mainPyshell = new PythonShell('app\\scripts\\lyricsBoi.py');
 
     // Start the server Python script
     createMainWindow()
@@ -37,8 +37,8 @@ app.whenReady().then(() =>{
 
 app.on('window-all-closed', () => {
     if (process.platform !== 'darwin') {
-        mainPyshell.end()
-        fetch('http://127.0.0.1:5000/shutdown') // PLEASE DIE
+        //mainPyshell.end()
+        //fetch('http://127.0.0.1:5000/shutdown') // PLEASE DIE
         app.quit()
     }
 })
