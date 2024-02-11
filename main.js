@@ -17,9 +17,7 @@ function createMainWindow()
             },
             icon: path.join(__dirname, 'app', 'assets', 'icon.ico'),
         })
-        
 
-    
         mainWindow.loadFile(path.join(__dirname, './app/index.html'));
 }
 
