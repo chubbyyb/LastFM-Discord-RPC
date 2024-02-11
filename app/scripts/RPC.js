@@ -11,29 +11,63 @@ rpc.on('ready', () => {
 });
 rpc.login({ clientId }).catch(console.error);
 
-// Get the config file
-function getConfig(){
-  fetch(path.join(__dirname, 'config.json'))
-  .then((response) => response.json())
-  .then((jsonF) => console.log(jsonF));
-  const username = jsonF["username"];
-  const api_key = jsonF["API_KEY"];
-  const useSmallImage = jsonF["smallImagePP"];
-  const displayScrobbles = jsonF["displayScrobbles"];
-  const displayLyrics = jsonF["displayLyrics"];
-  return [username, api_key, useSmallImage, displayScrobbles, displayLyrics];
+let username, api_key, useSmallImage, displayScrobbles, displayLyrics, gitButton, lastfmButton, BaseURL, URL, profileInfo;
+let smallImageURL = 'lastfm';
+let links = [];
+
+async function getConfig() {
+  const response = await fetch(path.join(__dirname, 'config.json'));
+  const jsonF = await response.json();
+
+  username = jsonF["username"];
+  api_key = jsonF["API_KEY"];
+  useSmallImage = jsonF["smallImagePP"];
+  displayScrobbles = jsonF["displayScrobbles"];
+  displayLyrics = jsonF["displayLyrics"];
+  gitButton = jsonF["gitButton"];
+  lastfmButton = jsonF["FMbutton"];
+
+  return [username, api_key, useSmallImage, displayScrobbles, displayLyrics, gitButton, lastfmButton];
 }
 
-// set the variables
-const userData = getConfig();
-username = userData[0];
-api_key = userData[1];
-useSmallImage = userData[2];
-displayScrobbles = userData[3];
-displayLyrics = userData[4];
-const BaseURL = `https://www.last.fm/user/${username}`;
-const URL = `http://ws.audioscrobbler.com/2.0/?method=user.getrecenttracks&user=${username}&api_key=${api_key}&format=json`;
-const profileInfo = `http://ws.audioscrobbler.com/2.0/?method=user.getinfo&user=${username}&api_key=${api_key}&format=json`;
+async function initialize() {
+  await getConfig();
+  // Code dependent on the configuration being loaded can go here
+  console.log("Configuration loaded:", username, api_key, useSmallImage, displayScrobbles, displayLyrics, gitButton, lastfmButton);
+  BaseURL = `https://www.last.fm/user/${username}`;
+  URL = `http://ws.audioscrobbler.com/2.0/?method=user.getrecenttracks&user=${username}&api_key=${api_key}&format=json`;
+  profileInfo = `http://ws.audioscrobbler.com/2.0/?method=user.getinfo&user=${username}&api_key=${api_key}&format=json`;
+  links = [];
+
+  if (gitButton && lastfmButton) {
+      links = [
+          { label: "Github", url: `https://github.com/chubbyyb/LastFM-Discord-RPC`}, 
+          { label: "Last.FM", url: `https://www.last.fm/user/${username}`}
+      ];
+  } else if (gitButton) {
+      links = [
+          { label: "Github", url: `https://github.com/chubbyyb/LastFM-Discord-RPC`}
+      ];
+  } else if (lastfmButton) {
+      links = [
+          { label: "Last.FM", url: `https://www.last.fm/user/${username}`}
+      ];
+  }
+
+  getProfilePic().then(data => {
+    const profilePicUrl = data.user.image[2]['#text'];
+    console.log(profilePicUrl); // Optional: Print the URL to verify
+    if(useSmallImage)
+    {
+      smallImageURL = profilePicUrl;
+    }
+    // You can now use the 'profilePicUrl' variable elsewhere in your code
+  });
+
+}
+
+// Call initialize() to populate global variables
+initialize();
 
 // Get profile picture
 async function getProfilePic()
@@ -42,19 +76,6 @@ async function getProfilePic()
   let data = await response.json();
   return data;
 }
-
-let smallImageURL = 'lastfm'
-
-getProfilePic().then(data => {
-  const profilePicUrl = data.user.image[2]['#text'];
-  console.log(profilePicUrl); // Optional: Print the URL to verify
-  if(useSmallImage)
-  {
-    smallImageURL = profilePicUrl;
-  }
-  // You can now use the 'profilePicUrl' variable elsewhere in your code
-});
-
 
 // Get the song data
 async function getSongData() {
@@ -73,13 +94,14 @@ let lastSong = null;
 
 function updateBio(songTitle, songArtist)
 {
-  fetch(`http://127.0.0.1:5000/changeBio?songTitle=${songTitle}&songArtist=${songArtist}`)
-  .then(response => {
-    if (response == "Success") {
-      console.log("Successfully updated bio")
-    }
-    return response.json(); // You may use response.text() if the server returns plain text
-  })
+//  fetch(`http://127.0.0.1:5000/changeBio?songTitle=${songTitle}&songArtist=${songArtist}`)
+//  .then(response => {
+//   if (response == "Success") {
+//      console.log("Successfully updated bio")
+//    }
+//    return response.json(); // You may use response.text() if the server returns plain text
+//  })
+  return "NO"
 }
 
 function updatePresence() {
@@ -179,8 +201,8 @@ function updatePresence() {
 
 function setActivity(song, artist, image, album, smallImageURL, scrobbles)
 {
-  if(displayLyrics){ updateBio(song, artist); }
-  
+//  if(displayLyrics){ updateBio(song, artist); }
+
   rpc.setActivity({
     details: `${song}`,
     state: `by ${artist}`,
@@ -190,7 +212,7 @@ function setActivity(song, artist, image, album, smallImageURL, scrobbles)
     smallImageKey: `${smallImageURL}`,
     smallImageText: `  ${scrobbles}`,
     instance: true,
-    buttons: [{ label: "Github", url: `https://github.com/chubbyyb/LastFM-Discord-RPC`}, { label: "Last.FM", url: `https://www.last.fm/user/${username}`}]
+    buttons: links
   });
 }
 
