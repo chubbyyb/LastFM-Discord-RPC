@@ -5,7 +5,23 @@ It will show:
 * Display currently listening to music from LastFM to Discord
 * Display LastFM profile picture to rich presence (Optional)
 * Display scrobble amount to rich presence (Optional)
+* Display the current songs lyrics in your bio (Optional, Beta) [Please read](#lyrics)
 
+<details>
+<summary><a name="lyrics"></a><H2>Lyrics 🎤</H2></summary>
+To activate lyrics
+   <ul>
+      <li> Go to Discord on your browser </li>
+      <li> Press settings in Discord and go to the bio changing section </li>
+      <li> Open inspect element </li>
+      <li> Press the **Network** tab </li>
+      <li> Change your bio to whatever </li>
+      <li> A event called "Profile" should now be in the network section, right click it and copy as cCurl (Bash) </li>
+      <li> Paste it into https://curlconverter.com/python/ </li>
+      <li> Open lyricsBoy.py and paste the output of curlconverter into the cookies and headers section </li>
+   </ul>
+</details>
+   
 ## Requirements 🛠️
 1. Create a [LastFM API Key](https://www.last.fm/api/account/create)
 2. Install the packaged version [here](https://github.com/chubbyyb/LastFM-Discord-RPC/releases/tag/v0.2)
